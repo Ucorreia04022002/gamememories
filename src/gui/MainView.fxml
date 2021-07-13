@@ -14,7 +14,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="To play">
                   <items>
-                    <MenuItem fx:id="menuItemToPlay" mnemonicParsing="false" onAction="#onMenuItemAbautAction" text="List" />
+                    <MenuItem fx:id="menuItemToPlay" mnemonicParsing="false" onAction="#onMenuItemToPlayAction" text="List" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Already played">
@@ -22,9 +22,9 @@
                     <MenuItem fx:id="menuItemAlredyPlayed" mnemonicParsing="false" onAction="#onMenuItemAlredyPlayedAction" text="List" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu mnemonicParsing="false" text="Users">
                   <items>
-                    <MenuItem fx:id="menuItemAbaut" mnemonicParsing="false" onAction="#onMenuItemAbautAction" text="About" />
+                    <MenuItem fx:id="menuItemUserList" mnemonicParsing="false" onAction="#onMenuItemUserListAction" text="User list" />
                   </items>
                 </Menu>
               </menus>

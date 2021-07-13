@@ -25,7 +25,7 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemAlredyPlayed;
 	
 	@FXML
-	private MenuItem menuItemAbaut;
+	private MenuItem menuItemUserList;
 	
 	
 	@FXML
@@ -39,8 +39,8 @@ public class MainViewController implements Initializable {
 	}
 	
 	@FXML
-	public void onMenuItemAbautAction() {
-		loadView("/gui/About.fxml");
+	public void onMenuItemUserListAction() {
+		loadView("/gui/UserList.fxml");
 	}
 	
 	private synchronized void loadView(String trade) {
