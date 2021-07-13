@@ -19,10 +19,14 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primalStage = primaryStage;
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ViewLogin.fxml"));
-			Parent parent = loader.load();
-			loginScene = new Scene(parent);
-			primaryStage.setScene(loginScene);
+			FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
+			ScrollPane scrollpane = loaderMain.load();
+			mainScene = new Scene(scrollpane);
+			scrollpane.setFitToHeight(true);
+			scrollpane.setFitToWidth(true);
+			
+			
+			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Game Memories login");
 			primaryStage.show();
 		} catch (IOException e) {
@@ -30,8 +34,12 @@ public class Main extends Application {
 		}
 	}
 	
-	public static Scene getMainScene() {
+	public static Scene getLoginScene() {
 		return loginScene;
+	}
+	
+	public static Scene getMainScene() {
+		return mainScene;
 	}
 	
 	public static Stage getPrimalStage() {

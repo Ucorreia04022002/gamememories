@@ -4,31 +4,32 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ScrollPane prefHeight="309.0" prefWidth="309.0">
-         <content>
-            <MenuBar prefHeight="25.0" prefWidth="264.0">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
+   <content>
+      <VBox prefHeight="281.0" prefWidth="475.0">
+         <children>
+            <MenuBar prefHeight="25.0" prefWidth="489.0">
               <menus>
                 <Menu mnemonicParsing="false" text="To play">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                    <MenuItem fx:id="menuItemToPlay" mnemonicParsing="false" onAction="#onMenuItemAbautAction" text="List" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Already played">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem fx:id="menuItemAlredyPlayed" mnemonicParsing="false" onAction="#onMenuItemAlredyPlayedAction" text="List" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Abaut">
+                <Menu mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem fx:id="menuItemAbaut" mnemonicParsing="false" onAction="#onMenuItemAbautAction" text="About" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
-         </content></ScrollPane>
-   </children>
-</AnchorPane>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
