@@ -10,6 +10,11 @@ public class Game {
 	private User User;
 	
 	
+	public Game() {
+		
+	}
+
+
 	public Game(Integer id, Integer gameprice, String gameName, Date releaseDate, model.entities.User user) {
 		
 		this.setId(id);

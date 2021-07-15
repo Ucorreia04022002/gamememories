@@ -7,6 +7,11 @@ public class User {
 	private String passwordUser;
 	
 	
+	
+	public User() {
+		
+	}
+
 	public User(Integer id, String nameUser, String passwordUser) {
 		this.setId(id);
 		this.setNameUser(nameUser);
