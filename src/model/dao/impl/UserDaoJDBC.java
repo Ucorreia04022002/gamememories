@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import db.DB;
 import db.DbException;
@@ -131,7 +129,7 @@ public class UserDaoJDBC implements UserDao {
 		
 	}
 
-	private User instatiateUser(ResultSet rs) throws SQLException {
+	public User instatiateUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setId(rs.getInt("UserId"));
 		user.setNameUser(rs.getString("UserName"));
@@ -157,7 +155,7 @@ public class UserDaoJDBC implements UserDao {
 				return list;
 		}
 		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			throw new DbException(e.getMessage()); 
 		}
 	}
 

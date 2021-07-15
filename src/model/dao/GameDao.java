@@ -12,4 +12,5 @@ public interface GameDao {
 	 void deleteById (Integer Id);
 	 User findById (Integer Id);
 	 List<Game> findAll();
+	User findByIdHelp(Integer Id);
 }

@@ -4,10 +4,12 @@ import java.util.Date;
 
 public class Game {
 
-	private Integer Id, gameprice;
+	private Integer Id;
+	private double gameprice;
 	private String gameName;
 	private Date releaseDate;
 	private User User;
+	private boolean condition;
 	
 	
 	public Game() {
@@ -15,13 +17,14 @@ public class Game {
 	}
 
 
-	public Game(Integer id, Integer gameprice, String gameName, Date releaseDate, model.entities.User user) {
+	public Game(Integer id, double gameprice, String gameName, Date releaseDate, model.entities.User user, boolean condition) {
 		
 		this.setId(id);
 		this.setGameprice(gameprice);
 		this.setGameName(gameName);
 		this.setReleaseDate(releaseDate);
 		this.setUser(user);
+		this.setCondition(condition);
 	}
 	
 	
@@ -31,11 +34,11 @@ public class Game {
 	public void setId(Integer id) {
 		Id = id;
 	}
-	public Integer getGameprice() {
+	public double getGameprice() {
 		return gameprice;
 	}
-	public void setGameprice(Integer gameprice) {
-		this.gameprice = gameprice;
+	public void setGameprice(double gameprice2) {
+		this.gameprice = gameprice2;
 	}
 	public String getGameName() {
 		return gameName;
@@ -43,7 +46,7 @@ public class Game {
 	public void setGameName(String gameName) {
 		this.gameName = gameName;
 	}
-	public Date getReleaseDate() {
+	public  Date getReleaseDate() {
 		return releaseDate;
 	}
 	public void setReleaseDate(Date releaseDate) {
@@ -55,6 +58,16 @@ public class Game {
 	public void setUser(User user) {
 		User = user;
 	}
+	public boolean getCondition() {
+		return condition;
+	}
+	public void setCondition(boolean condition) {
+		this.condition = condition;
+	}
+	
+	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
