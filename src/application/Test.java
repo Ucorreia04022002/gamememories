@@ -19,10 +19,7 @@ public class Test {
 		User user = userdao.findById(3);
 		
 		GameDao gameDao = DaoFactory.createGameDao();
-		List<Game> list = gameDao.findAll();
-		for(Game game : list) {
-			System.out.println(game);
-		}
+		
 		 
 		
 		

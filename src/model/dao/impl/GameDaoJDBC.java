@@ -70,7 +70,29 @@ public class GameDaoJDBC implements GameDao{
 
 	@Override
 	public void update(Game obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st =  null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE game "
+					+"SET GameId = ?, GamePrice = ?, GameName = ?, ReleaseDate = ?, GameUserId, GameCondition = ? "
+					+"WHERE GameId = ? "
+					);
+			st.setInt(1, obj.getId());;
+			st.setDouble(2, obj.getGameprice());
+			st.setString(3, obj.getGameName());
+			st.setDate(4, new java.sql.Date(obj.getReleaseDate().getTime()));
+			st.setInt(5, obj.getUser().getId());
+			st.setBoolean(6, obj.getCondition());
+			
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			
+		}
 		
 	}
 
@@ -81,7 +103,7 @@ public class GameDaoJDBC implements GameDao{
 	}
 
 	@Override
-	public User findById(Integer Id) {
+	public Game findById(Integer Id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

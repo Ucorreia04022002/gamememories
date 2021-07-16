@@ -10,7 +10,7 @@ public interface GameDao {
 	 void insert (Game obj);
 	 void update (Game obj);
 	 void deleteById (Integer Id);
-	 User findById (Integer Id);
+	 Game findById (Integer Id);
 	 List<Game> findAll();
 	User findByIdHelp(Integer Id);
 }
