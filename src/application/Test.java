@@ -17,8 +17,10 @@ public class Test {
 		
 		UserDao userdao = DaoFactory.createUserDao();
 		User user = userdao.findById(3);
+		System.out.println(user);
 		
 		GameDao gameDao = DaoFactory.createGameDao();
+		gameDao.deleteById(8);
 		
 		 
 		

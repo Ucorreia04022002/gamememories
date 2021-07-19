@@ -74,7 +74,7 @@ public class GameDaoJDBC implements GameDao{
 		try {
 			st = conn.prepareStatement(
 					"UPDATE game "
-					+"SET GameId = ?, GamePrice = ?, GameName = ?, ReleaseDate = ?, GameUserId, GameCondition = ? "
+					+"SET GameId = ?, GamePrice = ?, GameName = ?, ReleaseDate = ?, GameUserId = ?, GameCondition = ? "
 					+"WHERE GameId = ? "
 					);
 			st.setInt(1, obj.getId());;
@@ -83,6 +83,7 @@ public class GameDaoJDBC implements GameDao{
 			st.setDate(4, new java.sql.Date(obj.getReleaseDate().getTime()));
 			st.setInt(5, obj.getUser().getId());
 			st.setBoolean(6, obj.getCondition());
+			st.setInt(7, obj.getId());
 			
 			st.executeUpdate();
 		}
@@ -98,14 +99,54 @@ public class GameDaoJDBC implements GameDao{
 
 	@Override
 	public void deleteById(Integer Id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM game WHERE GameId = ?"
+					);
+			st.setInt(1, Id);
+			int rows = st.executeUpdate();
+			if (rows == 0) {
+				throw new DbException("non existent id selected");
+			}
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}		
 	}
 
 	@Override
 	public Game findById(Integer Id) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM game WHERE GameId = ? "
+					);
+			st.setInt(1, Id);
+			rs = st.executeQuery();
+			if(rs.next()) {
+				Game game = new Game();
+				game.setId(rs.getInt("GameId"));
+				game.setGameprice(rs.getDouble("GamePrice"));
+				game.setGameName(rs.getString("GameName"));
+				game.setReleaseDate(rs.getDate("ReleaseDate"));
+				game.setUser(findByIdHelp(rs.getInt("GameUserId")));
+				game.setCondition(rs.getBoolean("GameCondition"));
+				return game;
+			}
+			return null;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
@@ -120,7 +161,7 @@ public class GameDaoJDBC implements GameDao{
 			List<Game> list = new ArrayList<>();
 			
 			while(rs.next()) {
-				Game game = instatiateGame(rs, findById(rs.getInt("GameUserId")));
+				Game game = instatiateGame(rs, findByIdHelp(rs.getInt("GameUserId")));
 				list.add(game);
 				
 			}
