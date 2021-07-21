@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListeners;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,10 +27,9 @@ import javafx.stage.Stage;
 import model.entities.User;
 import model.services.UserService;
 
-public class UserListController implements Initializable {
-
-	private UserService userService;
+public class UserListController implements Initializable, DataChangeListeners {
 	
+	private UserService userService;
 	
 	@FXML
 	private TableView<User> tableViewUser;
@@ -54,7 +54,8 @@ public class UserListController implements Initializable {
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/UserForm.fxml", parentStage);
+		User obj = new User();
+		createDialogForm(obj, "/gui/UserForm.fxml", parentStage);
 	}
 	
 	
@@ -81,10 +82,16 @@ public class UserListController implements Initializable {
 		tableViewUser.setItems(obsUserList);
 	}
 	
-	private void createDialogForm (String trade, Stage parentStage) {
+	private void createDialogForm (User obj, String trade, Stage parentStage) {
 		try {
 		 	FXMLLoader loader = new FXMLLoader(getClass().getResource(trade));
 		 	Pane pane = loader.load();
+		 	
+		 	UserFormController controller = loader.getController();
+		 	controller.setUser(obj);
+		 	controller.setUserService(new UserService());
+		 	controller.subscribeDataChangeListeners(this);
+		 	controller.updateFormData();
 		 	
 		 	Stage dialogStage = new Stage();
 		 	dialogStage.setTitle("Enter User Data");
@@ -97,6 +104,13 @@ public class UserListController implements Initializable {
 		catch(IOException e) {
 			Alerts.showAlert("IO Exception","Error loading view",e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+
+	@Override
+	public void ondataChanged() {
+		updateTableView();
+		
 	}
 	
 }
