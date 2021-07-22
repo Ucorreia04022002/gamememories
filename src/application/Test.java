@@ -7,13 +7,13 @@ import java.util.List;
 import model.dao.DaoFactory;
 import model.dao.GameDao;
 import model.dao.UserDao;
+import model.dao.impl.UserDaoJDBC;
 import model.entities.Game;
 import model.entities.User;
 
 public class Test {
 
 	public static void main(String[] args) {
-		
 		
 		
 		

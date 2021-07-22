@@ -9,6 +9,7 @@ import application.Main;
 import gui.listeners.DataChangeListeners;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,47 +30,46 @@ import model.entities.User;
 import model.services.UserService;
 
 public class UserListController implements Initializable, DataChangeListeners {
-	
+
 	private UserService userService;
-	
+
 	@FXML
 	private TableView<User> tableViewUser;
-	
+
 	@FXML
 	private TableColumn<User, Integer> tableColumnId;
-	
+
 	@FXML
 	private TableColumn<User, String> tableColumnName;
-	
+
+	@FXML
+	private TableColumn<User, User> tableColumnEDIT;
+
 	@FXML
 	private Button btNew;
-	
+
 	private ObservableList<User> obsUserList;
-	
-	
+
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
-	
+
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		User obj = new User();
 		createDialogForm(obj, "/gui/UserForm.fxml", parentStage);
 	}
-	
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNode();
 	}
 
-
 	private void initializeNode() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("nameUser"));
-		
+
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewUser.prefHeightProperty().bind(stage.heightProperty());
 	}
@@ -80,37 +81,55 @@ public class UserListController implements Initializable, DataChangeListeners {
 		List<User> list = userService.findAll();
 		obsUserList = FXCollections.observableArrayList(list);
 		tableViewUser.setItems(obsUserList);
-	}
-	
-	private void createDialogForm (User obj, String trade, Stage parentStage) {
-		try {
-		 	FXMLLoader loader = new FXMLLoader(getClass().getResource(trade));
-		 	Pane pane = loader.load();
-		 	
-		 	UserFormController controller = loader.getController();
-		 	controller.setUser(obj);
-		 	controller.setUserService(new UserService());
-		 	controller.subscribeDataChangeListeners(this);
-		 	controller.updateFormData();
-		 	
-		 	Stage dialogStage = new Stage();
-		 	dialogStage.setTitle("Enter User Data");
-		 	dialogStage.setScene(new Scene(pane));
-		 	dialogStage.setResizable(false);
-		 	dialogStage.initOwner(parentStage);
-		 	dialogStage.initModality(Modality.WINDOW_MODAL);
-		 	dialogStage.showAndWait();
-		}
-		catch(IOException e) {
-			Alerts.showAlert("IO Exception","Error loading view",e.getMessage(), AlertType.ERROR);
-		}
+		initEditButtons();
 	}
 
+	private void createDialogForm(User obj, String trade, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(trade));
+			Pane pane = loader.load();
+
+			UserFormController controller = loader.getController();
+			controller.setUser(obj);
+			controller.setUserService(new UserService());
+			controller.subscribeDataChangeListeners(this);
+			controller.updateFormData();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Enter User Data");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}
+	}
 
 	@Override
 	public void ondataChanged() {
 		updateTableView();
-		
+
 	}
-	
+
+	private void initEditButtons() {
+		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEDIT.setCellFactory(param -> new TableCell<User, User>() {
+			private final Button button = new Button("edit");
+
+			@Override
+			protected void updateItem(User obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(
+						event -> createDialogForm(obj, "/gui/UserForm.fxml", Utils.currentStage(event)));
+			}
+		});
+	}
+
 }

@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListeners;
@@ -13,14 +15,19 @@ import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import model.dao.DaoFactory;
+import model.dao.UserDao;
 import model.entities.User;
+import model.exceptions.ValidationException;
 import model.services.UserService;
 
 public class UserFormController implements Initializable {
+	
+	UserDao userDao = DaoFactory.createUserDao();
 	
 	private User entity;
 	
@@ -41,6 +48,9 @@ public class UserFormController implements Initializable {
 	private TextField txtComfirm;
 	
 	@FXML
+	private Label labelErrorId;
+	
+	@FXML
 	private Label labelErrorName;
 	
 	@FXML
@@ -51,6 +61,10 @@ public class UserFormController implements Initializable {
 	
 	@FXML
 	private Button btCancel;
+	
+	@FXML
+	private Button btEdit;
+	
 	
 	public void setUserService(UserService service) {
 		this.service = service;
@@ -79,7 +93,33 @@ public class UserFormController implements Initializable {
 			Utils.currentStage(event).close();
 			
 		}
-		catch(DbException e) {
+		catch (ValidationException e ) {
+			setErrorMessages(e.getErros());
+		}
+		catch (DbException e) {
+			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	@FXML
+	public void onBtEditAction(ActionEvent event) {
+		if(entity == null) {
+			throw new IllegalStateException("Entity was null");
+		}
+		if(service == null) {
+			throw new IllegalStateException("Service was null");
+		}
+		try {
+			entity = getFormData();
+			service.updateUser(entity);
+			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
+			
+		}
+		catch (ValidationException e ) {
+			setErrorMessages(e.getErros());
+		}
+		catch (DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
 		}
 	}
@@ -93,9 +133,24 @@ public class UserFormController implements Initializable {
 
 	private User getFormData() {
 		User obj = new User();
+		
+		ValidationException exception = new ValidationException("Validation Error");
+		
+		
+		if(txtId.getText() == null || txtId.getText().trim().equals("")) {
+			exception.addError("nullId", "Field can´t be empty");
+		}
 		obj.setId(Utils.tryparseToInt(txtId.getText()));
+		
+		if(txtName.getText() == null || txtName.getText().trim().equals("")) {
+			exception.addError("name", "Field can´t be empty");
+		}
 		obj.setNameUser(txtName.getText());
 		obj.setPasswordUser(txtPassword.getText());
+		
+		if(exception.getErros().size() > 0) {
+			throw exception;
+		}
 		
 		return obj;
 	}
@@ -125,6 +180,19 @@ public class UserFormController implements Initializable {
 		txtId.setText(String.valueOf(entity.getId()));
 		txtName.setText(entity.getNameUser());
 		txtPassword.setText(entity.getPasswordUser());;
+		
+	}
+	
+	private void setErrorMessages(Map<String, String> errors) {
+		Set<String> fields = errors.keySet();
+		
+		if (fields.contains("name")) {
+			labelErrorName.setText(errors.get("name"));
+		}
+
+		if (fields.contains("nullId")) {
+			labelErrorId.setText(errors.get("nullId"));
+		}
 		
 	}
 

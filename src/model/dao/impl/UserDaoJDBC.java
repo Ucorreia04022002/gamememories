@@ -39,10 +39,6 @@ public class UserDaoJDBC implements UserDao {
 
 			if (rowsAffected > 0) {
 				ResultSet result = st.getGeneratedKeys();
-				if (result.next()) {
-					int id = result.getInt(1);
-					obj.setId(id);
-					}
 				DB.closeResultSet(result);
 				}
 			else {
