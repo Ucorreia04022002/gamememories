@@ -34,4 +34,7 @@ public class UserService {
 	public List<User> findAll() {
 		return userDao.findAll();
 	}
+	public void remove(User obj) {
+		userDao.deleteById(obj.getId());
+	}
 }
