@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.GameService;
 import model.services.UserService;
 
 public class MainViewController implements Initializable {
@@ -32,7 +33,10 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemToPlayAction() {
-		System.out.println("Enter");
+		loadView("/gui/GameList.fxml", (GameListController controller) -> {
+			controller.setGameService(new GameService());
+			controller.updateTableView();
+		});
 	}
 	
 	@FXML
