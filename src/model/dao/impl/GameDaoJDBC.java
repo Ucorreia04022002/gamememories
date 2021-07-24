@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import db.DB;
@@ -182,7 +183,7 @@ public class GameDaoJDBC implements GameDao{
 		game.setId(rs.getInt("GameId"));
 		game.setGameprice(rs.getDouble("GamePrice"));
 		game.setGameName(rs.getString("GameName"));
-		game.setReleaseDate(rs.getDate("ReleaseDate"));
+		game.setReleaseDate(new java.util.Date(rs.getTimestamp("releaseDate").getTime()));
 		game.setUser(user);
 		game.setCondition(rs.getBoolean("GameCondition"));
 		return game;
