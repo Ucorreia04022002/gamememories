@@ -32,6 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Game;
 import model.services.GameService;
+import model.services.UserService;
 
 public class GameListController implements Initializable, DataChangeListeners {
 
@@ -113,7 +114,8 @@ public class GameListController implements Initializable, DataChangeListeners {
 
 			GameFormController controller = loader.getController();
 			controller.setGame(obj);
-			controller.setGameService(new GameService());
+			controller.setServices(new GameService(), new UserService());
+			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListeners(this);
 			controller.updateFormData();
 
@@ -125,6 +127,7 @@ public class GameListController implements Initializable, DataChangeListeners {
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
 	}
