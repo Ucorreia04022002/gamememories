@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -53,8 +52,8 @@
             <Label fx:id="labelErrorUser" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label fx:id="labelErrorCondition" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label fx:id="labelErrorReleaseDate" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <ComboBox fx:id="comboBoxUser" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="comboBoxUser" prefWidth="150.0" promptText="Game user" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="comboBoxCondition" prefWidth="150.0" promptText="Condition" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </children>

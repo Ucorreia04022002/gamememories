@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,6 +59,9 @@ public class GameFormController implements Initializable {
 
 	@FXML
 	private TextField txtPrice;
+	
+	@FXML
+	private TextField txtCondition;
 
 	@FXML
 	private DatePicker dpReleaseDate;
@@ -78,10 +83,13 @@ public class GameFormController implements Initializable {
 
 	@FXML
 	private Label labelErrorCondition;
-
+	
 	@FXML
 	private ComboBox<User> comboBoxUser;
-
+	
+	@FXML
+	private ComboBox<String> comboBoxCondition;
+	
 	@FXML
 	private Button btSave;
 
@@ -92,6 +100,9 @@ public class GameFormController implements Initializable {
 	private Button btEdit;
 
 	private ObservableList<User> obsList;
+	
+	private ObservableList<String> obsListCondition;
+	
 
 	public void setServices(GameService service, UserService userService) {
 		this.service = service;
@@ -169,8 +180,34 @@ public class GameFormController implements Initializable {
 			exception.addError("name", "Field can´t be empty");
 		}
 		obj.setGameName(txtName.getText());
+		
+		if (txtPrice.getText() == null || txtPrice.getText().trim().equals("")) {
+			exception.addError("nullPrice", "Field can´t be empty");
+		}
 		obj.setGameprice(Double.parseDouble(txtPrice.getText()));
-
+		
+		if (dpReleaseDate.getValue() == null) {
+			exception.addError("nullDate", "Field can´t be empty");
+		}
+		else {
+			Instant instant = Instant.from(dpReleaseDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setReleaseDate(Date.from(instant));
+		}
+		
+		obj.setUser(comboBoxUser.getValue());
+		
+		if (comboBoxCondition.getValue() == null) {
+			exception.addError("conditionNull", "Field can´t be empty");
+		} 
+		if (comboBoxCondition.getValue() == "Played") {
+			obj.setCondition(true);
+		}
+		if (comboBoxCondition.getValue() == "No played") {
+			obj.setCondition(false);
+		}
+		
+		
+		
 		if (exception.getErros().size() > 0) {
 			throw exception;
 		}
@@ -195,6 +232,7 @@ public class GameFormController implements Initializable {
 		Constraints.setTextFieldDouble(txtPrice);
 		Utils.formatDatePicker(dpReleaseDate, "dd/MM/yyyy");
 		initializeComboBoxUser();
+		initializeComboBoxCondition();
 	}
 
 	public void updateFormData() {
@@ -214,6 +252,7 @@ public class GameFormController implements Initializable {
 		else {
 			comboBoxUser.setValue(entity.getUser());
 		}
+		comboBoxCondition.setValue(String.valueOf(entity.getCondition()));
 	}
 
 	public void loadAssociatedObjects() {
@@ -231,9 +270,35 @@ public class GameFormController implements Initializable {
 		if (fields.contains("name")) {
 			labelErrorName.setText(errors.get("name"));
 		}
+		else {
+			labelErrorName.setText("");
+		}
 
 		if (fields.contains("nullId")) {
 			labelErrorId.setText(errors.get("nullId"));
+		}
+		else {
+			labelErrorId.setText("");
+		}
+		
+		if (fields.contains("nullPrice")) {
+			labelErrorPrice.setText(errors.get("nullPrice"));
+		}
+		else {
+			labelErrorPrice.setText("");
+		}
+		
+		if (fields.contains("nullDate")) {
+			labelErrorReleaseDate.setText(errors.get("nullDate"));
+		}
+		else {
+			labelErrorReleaseDate.setText("");
+		}
+		if (fields.contains("conditionNull")) {
+			labelErrorCondition.setText(errors.get("conditionNull"));
+		}
+		else {
+			labelErrorCondition.setText("");
 		}
 
 	}
@@ -248,6 +313,16 @@ public class GameFormController implements Initializable {
 		};
 		comboBoxUser.setCellFactory(factory);
 		comboBoxUser.setButtonCell(factory.call(null));
+	}
+	
+	private void initializeComboBoxCondition() {
+		List<String> list = new ArrayList<String>();
+		list.add("Played");
+		list.add("No played");
+		
+		obsListCondition = FXCollections.observableArrayList(list);
+		comboBoxCondition.setItems(obsListCondition);
+
 	}
 
 }
