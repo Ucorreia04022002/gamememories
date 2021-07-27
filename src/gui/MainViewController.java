@@ -41,8 +41,11 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemAlredyPlayedAction() {
-		System.out.println("Enter");
-	}
+		loadView("/gui/GameListCondition.fxml", (GameListConditionController controller) -> {
+			controller.setGameService(new GameService());
+			controller.updateTableView();
+		});
+	}	
 	
 	@FXML
 	public void onMenuItemUserListAction() {
